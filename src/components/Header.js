@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Counter from './Counter';
+import Counter from './CounterWithHooks';
 
 export default function Header() {
   const [startValue, setStartValue] = useState('');

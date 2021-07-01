@@ -1,36 +1,65 @@
-import { useEffect, useState } from "react"
+import React, { Component } from 'react';
 
-export default function Counter({ start, increment }) {
-  let [counter, setCounter] = useState(0);
+let id;
+class Counter extends Component {
+  state = {
+    counter: 0,
+    test: 1,
+  }
 
-  useEffect(() => {
-    setCounter(start);
-  }, [start]);
+  increase() {
+    this.setState({
+      counter: this.state.counter + 1
+    })
+  }
 
-  useEffect(() => {
-    let id = setInterval(() => {
-      setCounter(currentValue => currentValue + 1);
-    }, 1000);
-
-    return () => {
-      clearInterval(id);
+  decrease() {
+    if (this.state.counter === 0) {
+      return;
     }
-  }, []);
 
-  // useEffect(() => {
-  //   if (counter > 110) {
-  //     alert('count > 110');
-  //   }
-  // }, [counter]);
+    this.setState({
+      counter: this.state.counter - 1
+    })
+  }
 
-  return (
-    <div>
-      <p>{counter}</p>
-      <button
-        onClick={() => setCounter(counter + (increment || 1))}
-      >
-          click
-      </button>
-    </div>
-  )
+  componentDidMount() {
+    id = setInterval(() => {
+      this.setState({
+        counter: this.state.counter + 1
+      });
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(id);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.start !== this.props.start) {
+      this.setState({
+        counter: this.props.start
+      });
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <p>{this.state.counter}</p>
+        <button
+          onClick={() => this.increase()}
+        >
+            +
+        </button>
+        <button
+          onClick={() => this.decrease()}
+        >
+            _
+        </button>
+      </div>
+    )
+  }
 }
+
+export default Counter;
